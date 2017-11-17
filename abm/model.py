@@ -2,12 +2,16 @@ import networkx as nx
 import random
 
 class Patch:
-    def __init__(self, greeness=0.5):
+    def __init__(self, greeness=0.5, r=0.2, k=0.8):
         self.greeness = greeness
+        self.r = r
+        self.k = k
 
     def update_greeness(self, neighbors):
-        G = [p.greeness for p in neighbors]
-        self.greeness = sum(G) / len(G)
+        g = [p.greeness for p in neighbors]
+        G = sum(g) / len(g)
+        deltaG = G * self.greeness * (1 - self.greeness / self.k)
+        self.greeness += deltaG
 
     def __repr__(self):
         return u"%0.2f" % self.greeness
