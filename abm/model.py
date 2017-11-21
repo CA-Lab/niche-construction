@@ -1,5 +1,7 @@
 import networkx as nx
 import random
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Patch:
     def __init__(self, greeness=0.5, r=0.2, k=0.8):
@@ -41,6 +43,22 @@ class Universe:
         # remove self loops from graph
         self.g.remove_edges_from(self.g.selfloop_edges())
 
-    def randomize_greeness(self):
+    def randomize_greeness(self, r=0.2, k=0.8):
         for p in self.g.nodes():
             p.greeness = random.random()
+            p.r = r
+            p.k = k
+
+
+    def plot(self, path):
+        greens = np.zeros((self.width, self.height))
+        for x in range(self.width):
+            for y in range(self.height):
+                patch = self.grid[x][y]
+                greens[x][y] = patch.greeness
+
+        plt.imshow(greens, interpolation='nearest')
+        #plt.colorbar()
+        # plt.show()
+        plt.savefig(path)
+        plt.cla()
